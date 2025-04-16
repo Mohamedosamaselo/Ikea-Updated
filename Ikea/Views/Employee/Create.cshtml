@@ -1,0 +1,19 @@
+﻿@model EmployeeEditViewModel;
+
+@{
+   // ViewData["Title"] = "Create";
+    //var Departments = new SelectList(ViewData["Departments"] as IEnumerable<DepartmentDto> ,nameof(DepartmentDto.Id) , nameof(DepartmentDto.Name)) ;
+}
+
+<h1 class=" my-3">Create New Employee </h1>
+
+<partial name="Partial/CreatedEditEmployeePartial" />
+
+@section ValidationScripts {
+    <partial name="_ValidationScriptsPartial" />
+@*     
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    *@
+}

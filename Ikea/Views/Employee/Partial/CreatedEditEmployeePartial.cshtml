@@ -1,0 +1,92 @@
+﻿@model EmployeeEditViewModel
+@inject IDepartmentService departmentService; //
+
+@{
+   // var Departments = new SelectList(ViewData["Departments"] as IEnumerable<DepartmentDto>, nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+    var Departments = new SelectList(await departmentService.GetAllDepartmentsAsync(), nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+}
+
+<form asp-action="Create" class=" form-control p-3" enctype="multipart/form-data">
+
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="Name"></label>
+        <input asp-for="Name" class="form-control mb-3" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="Email"></label>
+        <input asp-for="Email" class="form-control  mb-3" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="Age"></label>
+        <input asp-for="Age" class="form-control  mb-3" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="Address"></label>
+        <input asp-for="Address" class="form-control  mb-3" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="Salary"></label>
+        <input asp-for="Salary" class="form-control  mb-3" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
+    </div>
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control  mb-3" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="HiringDate"></label>
+        <input type="date" asp-for="HiringDate" class="form-control  mb-3" />
+        <span asp-validation-for="HiringDate" class="text-danger"></span>
+    </div>
+    @* Uploading Image  *@
+    <div class="form-Group mb-3 ">
+        <label class="form-label " asp-for="Image"></label>
+        <input type="file" asp-for="Image" class="form-control  mb-3" />
+        @* <span asp-validation-for="Image" class="text-danger"></span> *@
+    </div>
+
+    @* isActive *@
+    <div class="form-check mb-3 ">
+        <label asp-for="IsActive" class="form-check-label" for="flexCheckChecked">IsActive</label>
+        <input asp-for="IsActive" class="form-check-input  mb-3" type="checkbox" id="flexCheckChecked">
+    </div>
+    @* Display Enum[ Gender ] As Radio Buttom *@
+    <div class="Form-Group mb-3 ">
+        <label class="form-label" asp-for="Gender"></label><br />
+        @foreach (var Gender in Enum.GetValues(typeof(Gender)))
+        {
+            <label class="radio-inline">
+                <input type="radio" asp-for="Gender" value="@Gender" />
+                @Gender
+            </label>
+        }
+    </div>
+
+    @* Display Departments (from Database) As SelectList  *@
+    <div class="form-Group mb-3 ">
+        <label asp-for="DepartmentId" class="control-label mb-3"></label>
+        <select asp-for="DepartmentId" asp-items="@Departments" class="form-control">
+            <option value="@null">Choose Department </option>
+        </select>
+    </div>
+
+    @* Display Enum[ EmployeeType ] As SelectList  *@
+    <div class="form-Group mb-3 ">
+        <label asp-for="EmployeeType" class="control-label mb-3"></label>
+        <select asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmployeeType>()" class="form-control">
+            <option value="">Choose Employee Type  </option>
+        </select>
+    </div>
+
+    <div class="mt-3 ms-auto">
+        <input type="submit" value="Create" class="btn btn-primary" /> |
+        <a asp-action="Index" class="btn btn-info">Back to list</a>
+    </div>
+</form>

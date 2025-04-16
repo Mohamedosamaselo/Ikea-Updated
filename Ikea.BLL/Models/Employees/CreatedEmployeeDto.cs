@@ -1,0 +1,50 @@
+﻿using Ikea.DAL.Common.Enums;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+
+namespace Ikea.BLL.Models.Employees
+{
+    public class CreatedEmployeeDto
+    {
+        [Required]
+        [MaxLength(50, ErrorMessage = "MaxLength of Name is 50 char ")]
+        [MinLength(5, ErrorMessage = "MinLength of Name is 5 char ")]
+        public string Name { get; set; } 
+
+
+        [EmailAddress] // Aplication Validation 
+        public string? Email { get; set; }
+
+
+        [Range(18, 50)]
+        public int? Age { get; set; } 
+
+        [Required]
+        [RegularExpression(@"^[0-9]{1,3}-[a-zA-Z]{5,10}-[a-zA-Z]{4,10}-[a-zA-Z]{5,10}$",
+          ErrorMessage = "Address Must Be Like 123-Street-City-Country ")]
+        public string? Address { get; set; }
+
+        public decimal Salary { get; set; }
+
+        [Phone]
+        [Display(Name = "Phone Number")]
+        public string? PhoneNumber { get; set; }
+
+        [Display(Name = "Is Active")]
+        public bool IsActive { get; set; }
+
+        [Display(Name = "Hiring Date")]
+        public DateOnly HiringDate { get; set; }
+
+        public Gender Gender { get; set; }
+
+        [Display(Name = "Employee Type")]
+        public EmployeeType EmployeeType { get; set; }
+
+        [Display(Name = "Department")]
+        public int? DepartmentId { get; set; }  
+
+        public IFormFile? Image {  get; set; } //to upload  Image of the Employee 
+
+    }
+}
