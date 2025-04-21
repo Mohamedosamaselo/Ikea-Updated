@@ -1,4 +1,5 @@
-﻿using Ikea.DAL.Entities.Identity;
+﻿using Ikea.BLL.Common.EmailSettings;
+using Ikea.DAL.Entities.Identity;
 using Ikea.PL.ViewModels.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -71,7 +72,7 @@ namespace Ikea.PL.Controllers.Auth
 
         #endregion
 
-        #region SignIn
+        #region SignIn | Login
 
         [HttpGet]
         public IActionResult SignIn()
@@ -125,9 +126,7 @@ namespace Ikea.PL.Controllers.Auth
 
         #endregion
 
-
         #region SignOut
-
 
         public async new Task<IActionResult> SignOut()
         {
@@ -135,10 +134,82 @@ namespace Ikea.PL.Controllers.Auth
             return RedirectToAction(nameof(SignIn));
         }
 
-        
+
 
 
         #endregion
 
+
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> SendEmail(ForgetPasswordViewModel Model)
+        {
+            if (ModelState.IsValid)
+            {
+                var User = await _userManager.FindByEmailAsync(Model.Email);
+                if (User is not null)
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(User);
+                    // Token is Valid Only For one use 
+                    // Https://localhost:44311/Auth/ResetPassword?email=mo5195278@gmail.com/Token
+                    var ResetPasswordLink = Url.Action("ResetPassword", "Auth", new { email = User.Email, Token = token }, Request.Scheme);
+                    // Send Email 
+                    var email = new Email()
+                    {
+                        To = Model.Email,
+                        Subject = "Reset Password",
+                        Body = ResetPasswordLink,
+                    };
+                    EmailSetting.SendEmail(email);
+                    return RedirectToAction(nameof(CheckYourInbox));
+                }
+                else
+                    ModelState.AddModelError(string.Empty, "Your Email is Not Exists");
+            }
+            return View("ForgetPassword", Model);
+        }
+
+        [HttpGet]
+        public IActionResult CheckYourInbox()
+        {
+            return View();
+        }
+
+
+        #region Reset Password
+        // OldPassword = P@ssw0rd
+        // NewPassword = Pa$$w0rd
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            // TempData => To Transfere data From Action to action 
+            TempData["Email"] = email;
+            TempData["token"] = token;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string? Token = TempData["token"] as string;
+                string? email = TempData["email"] as string;
+                var User = await _userManager.FindByEmailAsync(email!);
+
+                var Result = await _userManager.ResetPasswordAsync(User, Token, model.NewPassword);
+                if (Result.Succeeded)
+                    return RedirectToAction(nameof(SignIn));
+                else
+                    foreach (var error in Result.Errors)
+                        ModelState.AddModelError(string.Empty, "Invalid Password ");
+            }
+            return View(model);
+        }
+
+        #endregion
     }
 }

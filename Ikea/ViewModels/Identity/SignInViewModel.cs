@@ -4,7 +4,8 @@ namespace Ikea.PL.ViewModels.Identity
 {
     public class SignInViewModel
     {
-        [EmailAddress(ErrorMessage = "Email is Required")]
+        [Required(ErrorMessage ="Email Is Required ")]
+        [EmailAddress(ErrorMessage = "Invalid Email")]
         public string Email { get; set; } = "";
         //[MinLength(5)]
         [DataType(DataType.Password)]

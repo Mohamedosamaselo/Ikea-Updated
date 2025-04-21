@@ -22,14 +22,12 @@ namespace Ikea.PL.ViewModels.Identity
 
         [Required(ErrorMessage = "Password is Required")]
         [DataType(DataType.Password)]
-       
         public string Password { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "ConfirmPassword is Required")]
         [Display(Name = "Confirm Password")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Confirm Password doesn't match with Password")]
-        
+        [Compare("Password", ErrorMessage = " Password doesn't matched")]
         public string ConfirmPassword { get; set; } = string.Empty;
         
         public bool IsAgree { get; set; }

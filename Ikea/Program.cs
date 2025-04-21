@@ -66,7 +66,8 @@ namespace Ikea
 
 
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             // builder.Services.AddScoped<UserManager<ApplicationUser>>();
             // builder.Services.AddScoped<SignInManager<ApplicationUser>>();
@@ -101,12 +102,13 @@ namespace Ikea
                     options.LogoutPath = "/Account/SignIn";
 
                 });
-           ///            .AddScheme("Hamada01", ".AspNetCore.Hamada01", options =>
-           ///            {
-           ///            }).AddScheme("Hamada02", ".AspNetCore.Hamada02", options =>
-           ///{
-           ///});
+            ///            .AddScheme("Hamada01", ".AspNetCore.Hamada01", options =>
+            ///            {
+            ///            }).AddScheme("Hamada02", ".AspNetCore.Hamada02", options =>
+            ///{
+            ///});
 
+           
 
 
 
